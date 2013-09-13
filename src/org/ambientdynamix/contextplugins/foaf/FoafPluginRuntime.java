@@ -17,11 +17,16 @@
 package org.ambientdynamix.contextplugins.foaf;
 
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
 
 import org.ambientdynamix.api.contextplugin.*;
 import org.ambientdynamix.api.contextplugin.security.PrivacyRiskLevel;
 import org.ambientdynamix.api.contextplugin.security.SecuredContextInfo;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.input.SAXBuilder;
 
 import android.content.Context;
 import android.content.Intent;
@@ -46,6 +51,8 @@ public class FoafPluginRuntime extends AutoReactiveContextPluginRuntime
 	private static String foaffile="";
 	public static ContextPluginSettings settings;
 	Timer timer;
+	
+	static String foafname="";
 	
 	@Override
 	public void start() 
@@ -86,7 +93,7 @@ public class FoafPluginRuntime extends AutoReactiveContextPluginRuntime
 	@Override
 	public void handleContextRequest(UUID requestId, String contextInfoType) 
 	{
-		SecuredContextInfo aci= new SecuredContextInfo(new FoafContextInfo(), PrivacyRiskLevel.LOW);
+		SecuredContextInfo aci= new SecuredContextInfo(new ProfileContextInfo(), PrivacyRiskLevel.LOW);
 		sendContextEvent(requestId, aci);
 		context=this;
 	}
@@ -159,7 +166,33 @@ public class FoafPluginRuntime extends AutoReactiveContextPluginRuntime
 	public static void updateFoafFile() 
 	{
 		String foafurl = settings.get(Constants.FOAFURL);
-		//TODO. get data from the url and store it
+		foafurl = "http://galileo1.zapto.org/tvluke.rdf";
+		final SAXBuilder builder = new SAXBuilder();
+		try 
+		{
+			Document doc = builder.build(foafurl);
+			Element root = doc.getRootElement();
+			List<Element> children = root.getChildren();
+			Iterator<Element> childrenIterator = children.iterator();
+			while(childrenIterator.hasNext())
+            {
+				Element child = childrenIterator.next();
+				List<Element> grandchildren = child.getChildren();
+				Iterator<Element> grandchildrenIterator = grandchildren.iterator();
+				while(grandchildrenIterator.hasNext())
+				{
+					Element grandchild = grandchildrenIterator.next();
+					if(grandchild.getName().equals("foaf:name"))
+					{
+						foafname = grandchild.getText();
+					}
+				}
+            }
+		}
+		catch(Exception e)
+		{
+			
+		}
 	}
 
 }

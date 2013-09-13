@@ -33,33 +33,33 @@ import android.util.Log;
  * @author lukas
  *
  */
-public class FoafContextInfo implements IContextInfo
+public class ProfileContextInfo implements IContextInfo
 {
 
 	private final String TAG = Constants.TAG;
-	String foafcontent="";
+	String foafname="";
 	
-	public static Parcelable.Creator<FoafContextInfo> CREATOR = new Parcelable.Creator<FoafContextInfo>() 
+	public static Parcelable.Creator<ProfileContextInfo> CREATOR = new Parcelable.Creator<ProfileContextInfo>() 
 			{
-			public FoafContextInfo createFromParcel(Parcel in) 
+			public ProfileContextInfo createFromParcel(Parcel in) 
 			{
-				return new FoafContextInfo(in);
+				return new ProfileContextInfo(in);
 			}
 
-			public FoafContextInfo[] newArray(int size) 
+			public ProfileContextInfo[] newArray(int size) 
 			{
-				return new FoafContextInfo[size];
+				return new ProfileContextInfo[size];
 			}
 		};
 		
-	FoafContextInfo()
+	ProfileContextInfo()
 	{
-		foafcontent=FoafPluginRuntime.getFoafText();
+		foafname=FoafPluginRuntime.foafname;
 	}
 	
-	public FoafContextInfo(Parcel in) 
+	public ProfileContextInfo(Parcel in) 
 	{
-		foafcontent=in.readString();
+		foafname=in.readString();
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public class FoafContextInfo implements IContextInfo
 	@Override
 	public void writeToParcel(Parcel out, int flags) 
 	{
-		out.writeString(foafcontent);
+		out.writeString(foafname);
 	}
 
 	@Override
@@ -96,7 +96,7 @@ public class FoafContextInfo implements IContextInfo
 	@Override
 	public String getStringRepresentation(String format) 
 	{
-		String result="";
+		String result=foafname;
 		if (format.equalsIgnoreCase("text/plain"))
 		{
 			//return id;
