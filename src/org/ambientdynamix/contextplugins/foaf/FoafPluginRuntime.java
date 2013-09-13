@@ -45,7 +45,8 @@ public class FoafPluginRuntime extends AutoReactiveContextPluginRuntime
 	private static FoafPluginRuntime context;
 	private static String foaffile="";
 	public static ContextPluginSettings settings;
-
+	Timer timer;
+	
 	@Override
 	public void start() 
 	{
@@ -130,6 +131,7 @@ public class FoafPluginRuntime extends AutoReactiveContextPluginRuntime
 				}
 			}
 		}
+		timer=new Timer();
 		context=this;
 		
 	}
