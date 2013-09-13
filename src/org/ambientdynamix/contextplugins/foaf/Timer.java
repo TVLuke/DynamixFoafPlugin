@@ -38,13 +38,13 @@ public class Timer {
 	class BackendRunner implements Runnable
 	{
 		private Handler handler = new Handler();
-		private int delay=60000;
+		private int delay=300000;
 		long counter=0;
 		
 		@Override
 		public void run() 
 		{
-			//TODO: call something here.
+			FoafPluginRuntime.updateFoafFile();
 			Log.d(TAG, "run");
 			handler.removeCallbacks(this); // remove the old callback
 			if(!stop)

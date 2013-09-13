@@ -72,6 +72,7 @@ public class FoafPluginRuntime extends AutoReactiveContextPluginRuntime
 		/*
 		 * At this point, the plug-in should release any resources.
 		 */
+		timer.stop();
 		stop();
 		Log.i(TAG, "Destroyed!");
 	}
@@ -153,6 +154,12 @@ public class FoafPluginRuntime extends AutoReactiveContextPluginRuntime
 	public static String getFoafText() 
 	{
 		return foaffile;
+	}
+
+	public static void updateFoafFile() 
+	{
+		String foafurl = settings.get(Constants.FOAFURL);
+		//TODO. get data from the url and store it
 	}
 
 }
