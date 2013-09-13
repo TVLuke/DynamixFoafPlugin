@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package org.ambientdynamix.contextplugins.ping;
+package org.ambientdynamix.contextplugins.foaf;
 
 import org.ambientdynamix.api.contextplugin.*;
 
 public class PluginFactory extends ContextPluginRuntimeFactory 
 {
+	private final String TAG = Constants.TAG;
+	
 	public PluginFactory() 
 	{
-		super(PingPluginRuntime.class, null, null);
+		super(FoafPluginRuntime.class, null, null);
 	}
 }

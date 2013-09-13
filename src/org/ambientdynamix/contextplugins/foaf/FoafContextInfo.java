@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.ambientdynamix.contextplugins.ping;
+package org.ambientdynamix.contextplugins.foaf;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -33,35 +33,33 @@ import android.util.Log;
  * @author lukas
  *
  */
-public class PingContextInfo implements IContextInfo
+public class FoafContextInfo implements IContextInfo
 {
 
-	private final String TAG = "PINGPLUGIN";
+	private final String TAG = Constants.TAG;
+	String foafcontent="";
 	
-	String id="";
-	
-	public static Parcelable.Creator<PingContextInfo> CREATOR = new Parcelable.Creator<PingContextInfo>() 
+	public static Parcelable.Creator<FoafContextInfo> CREATOR = new Parcelable.Creator<FoafContextInfo>() 
 			{
-			public PingContextInfo createFromParcel(Parcel in) 
+			public FoafContextInfo createFromParcel(Parcel in) 
 			{
-				return new PingContextInfo(in);
+				return new FoafContextInfo(in);
 			}
 
-			public PingContextInfo[] newArray(int size) 
+			public FoafContextInfo[] newArray(int size) 
 			{
-				return new PingContextInfo[size];
+				return new FoafContextInfo[size];
 			}
 		};
 		
-	PingContextInfo(String x)
+	FoafContextInfo()
 	{
-		Log.d(TAG, "create Current Time");
-		this.id=x;
+		foafcontent=FoafPluginRuntime.getFoafText();
 	}
 	
-	public PingContextInfo(Parcel in) 
+	public FoafContextInfo(Parcel in) 
 	{
-		id=in.readString();
+		foafcontent=in.readString();
 	}
 
 	@Override
@@ -80,13 +78,13 @@ public class PingContextInfo implements IContextInfo
 	@Override
 	public void writeToParcel(Parcel out, int flags) 
 	{
-		out.writeString(id);
+		out.writeString(foafcontent);
 	}
 
 	@Override
 	public String getContextType() 
 	{
-		return "org.ambientdynamix.contextplugins.context.info.sample.ping";
+		return "org.ambientdynamix.contextplugins.context.info.individual.profile";
 	}
 
 	@Override
@@ -101,18 +99,17 @@ public class PingContextInfo implements IContextInfo
 		String result="";
 		if (format.equalsIgnoreCase("text/plain"))
 		{
-			return id;
+			//return id;
 		}
 		else if (format.equalsIgnoreCase("XML"))
 		{
-			return "<ping>"+id+"</ping>";
+			//return "<ping>"+id+"</ping>";
 		}
 		else if (format.equalsIgnoreCase("JSON"))
 		{
-			return "ping: "+id;
+			//return "ping: "+id;
 		}
-		else
-			return null;
+		return null;
 	}
 
 	@Override

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.ambientdynamix.contextplugins.ping;
+package org.ambientdynamix.contextplugins.foaf;
 
 import java.util.Date;
 import java.util.UUID;
@@ -39,10 +39,12 @@ import android.util.Log;
  * @author lukas
  *
  */
-public class PingPluginRuntime extends AutoReactiveContextPluginRuntime
+public class FoafPluginRuntime extends AutoReactiveContextPluginRuntime
 {
-	private final String TAG = "PINGPLUGIN";
-	private static PingPluginRuntime context;
+	private final String TAG = Constants.TAG;
+	private static FoafPluginRuntime context;
+	private static String foaffile="";
+	public static ContextPluginSettings settings;
 
 	@Override
 	public void start() 
@@ -82,23 +84,15 @@ public class PingPluginRuntime extends AutoReactiveContextPluginRuntime
 	@Override
 	public void handleContextRequest(UUID requestId, String contextInfoType) 
 	{
-		//SecuredContextInfo aci= new SecuredContextInfo(new PingContextInfo(requestId.toString()), PrivacyRiskLevel.LOW);
-		//sendContextEvent(requestId, aci);
+		SecuredContextInfo aci= new SecuredContextInfo(new FoafContextInfo(), PrivacyRiskLevel.LOW);
+		sendContextEvent(requestId, aci);
 		context=this;
 	}
 
 	@Override
 	public void handleConfiguredContextRequest(UUID requestId, String contextInfoType, Bundle scanConfig) 
 	{
-		Date d = new Date();
-		long x1 = d.getTime();
-		//Log.d(TAG, "received Request: "+x1);
-		String id = scanConfig.getString("id");
-		SecuredContextInfo aci= new SecuredContextInfo(new PingContextInfo(id), PrivacyRiskLevel.LOW);
-		sendContextEvent(requestId, aci);
-		d = new Date();
-		//Log.d(TAG, "Send Context: "+d.getTime());
-		Log.d(TAG, id+" - time: "+(d.getTime()-x1)+ "ms");
+		handleContextRequest(requestId, contextInfoType);
 		context=this;
 	}
 
@@ -106,8 +100,37 @@ public class PingPluginRuntime extends AutoReactiveContextPluginRuntime
 	public void init(PowerScheme arg0, ContextPluginSettings arg1) throws Exception 
 	{
 		Log.d(TAG, "init");
+		if(arg1!=null)
+		{
+			Log.d(TAG, "settings are not null and now get stored as a static variable");
+			settings=  arg1;
+			Log.d(TAG, "they are also stored via dynamix");
+			getPluginFacade().storeContextPluginSettings(getSessionId(), settings);
+		}
+		else
+		{
+			Log.d(TAG, "settings given to this method are null");
+			settings =  getPluginFacade().getContextPluginSettings(getSessionId());
+			if(settings!=null)
+			{
+				Log.d(TAG, "ok that worked");
+			}
+			else
+			{
+				ContextPluginSettings s = new ContextPluginSettings();
+				getPluginFacade().storeContextPluginSettings(getSessionId(), s);
+				settings = getPluginFacade().getContextPluginSettings(getSessionId());
+				if(settings!=null)
+				{
+					Log.d(TAG, "ok, third one is the charm I guess...");
+				}
+				else
+				{
+					Log.d(TAG, "the settings are still null");
+				}
+			}
+		}
 		context=this;
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -121,8 +144,13 @@ public class PingPluginRuntime extends AutoReactiveContextPluginRuntime
 	@Override
 	public void doManualContextScan() 
 	{
-		// TODO Auto-generated method stub
 		
+		
+	}
+
+	public static String getFoafText() 
+	{
+		return foaffile;
 	}
 
 }
